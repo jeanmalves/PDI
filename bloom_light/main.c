@@ -50,31 +50,33 @@ int main ()
     }
 
     Imagem* img_out = criaImagem (img->largura, img->altura, 3);
-    //cinzaParaRGB (img, img_out);
 
     binariza_custom(img, img_out, THRESHOLD);
-    // Segmenta a imagem.
-    //if (NEGATIVO)
-    //    inverte (img, img);
-    //binariza (img, img, THRESHOLD);
-    //salvaImagem (img, "01 - binarizada.bmp");
+    binariza_custom(img, img_out, THRESHOLD);
 
-    //Componente* componentes;
-    //int n_componentes;
-    //clock_t tempo_inicio = clock ();
-    //n_componentes = rotula (img, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
-    //clock_t tempo_total = clock () - tempo_inicio;
+    int sig = 3;
+    Imagem *img_out2 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
+    filtroGaussiano(img_out, img_out2, sig, sig, NULL);
 
-    //printf ("Tempo: %d\n", (int) tempo_total);
-    //printf ("%d componentes detectados.\n", n_componentes);
+    sig = sig * sig;
 
-    // Mostra os objetos encontrados.
-    //for (i = 0; i < n_componentes; i++)
-    //    desenhaRetangulo (componentes [i].roi, criaCor (255,0,0), img_out);
+    Imagem *img_out3 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
+    filtroGaussiano(img_out2, img_out3, sig, sig, NULL);
+
+    sig = sig * sig;
+
+    Imagem *img_out4 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
+    filtroGaussiano(img_out3, img_out4, sig, sig, NULL);
+
+    salvaImagem (img_out4, "filtro.bmp");
+
     salvaImagem (img_out, "02 - out.bmp");
 
-    // Limpeza.
-    //free (componentes);
+    // Limpez4a.
+    //free (c3omponentes);
+    destroiImagem (img_out4);
+    destroiImagem (img_out3);
+    destroiImagem (img_out2);
     destroiImagem (img_out);
     destroiImagem (img);
     return (0);
