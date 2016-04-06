@@ -53,25 +53,39 @@ int main ()
 
     binariza_custom(img, img_out, THRESHOLD);
 
-    int sig = 3;
+    salvaImagem (img_out, "limiarizacao.bmp");
+
+    int sig = 2;
     Imagem *img_out2 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
     filtroGaussiano(img_out, img_out2, sig, sig, NULL);
 
-    sig = sig * sig;
+    salvaImagem (img_out2, "filtro_sig2.bmp");
+
+    sig = sig * 2;
 
     Imagem *img_out3 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
-    filtroGaussiano(img_out2, img_out3, sig, sig, NULL);
+    filtroGaussiano(img_out, img_out3, sig, sig, NULL);
 
-    sig = sig * sig;
+    salvaImagem (img_out3, "filtro_sig4.bmp");
+
+    sig = sig * 2;
 
     Imagem *img_out4 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
-    filtroGaussiano(img_out3, img_out4, sig, sig, NULL);
+    filtroGaussiano(img_out, img_out4, sig, sig, NULL);
 
-    //soma(Imagem* in1, Imagem* in2, float mul1, float mul2, Imagem* out)
+    salvaImagem (img_out4, "filtro_sig8.bmp");
 
-    salvaImagem (img_out4, "filtro.bmp");
+    Imagem *img_soma1 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
+    Imagem *img_soma_final = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
+    soma(img_out2, img_out3, 0.5, 0.5, img_soma1);
+    soma(img_soma1, img_out4, 0.5, 0.5, img_soma_final);
 
-    salvaImagem (img_out, "02 - out.bmp");
+    salvaImagem (img_soma_final, "filtro_soma.bmp");
+
+    Imagem *img_final = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
+    soma(img_soma_final, img, 0.4, 0.6, img_final);
+
+    salvaImagem (img_final, "final.bmp");
 
     // Limpez4a.
     //free (c3omponentes);
