@@ -52,7 +52,6 @@ int main ()
     Imagem* img_out = criaImagem (img->largura, img->altura, 3);
 
     binariza_custom(img, img_out, THRESHOLD);
-    binariza_custom(img, img_out, THRESHOLD);
 
     int sig = 3;
     Imagem *img_out2 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
@@ -67,6 +66,8 @@ int main ()
 
     Imagem *img_out4 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
     filtroGaussiano(img_out3, img_out4, sig, sig, NULL);
+
+    //soma(Imagem* in1, Imagem* in2, float mul1, float mul2, Imagem* out)
 
     salvaImagem (img_out4, "filtro.bmp");
 
