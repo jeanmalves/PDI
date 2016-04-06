@@ -100,6 +100,8 @@ int main ()
 /*----------------------------------------------------------------------------*/
 /** Binariza��o simples por limiariza��o.
  *
+ * A rotulagem obtém os pixels mais claros ( >= threshold) e adiciona na imagem
+ * de saída, já os píxels >= threshold são rotulados com valor = 0.
  * Par�metros: Imagem* in: imagem de entrada. Se tiver mais que 1 canal,
  *               binariza cada canal independentemente.
  *             Imagem* out: imagem de sa�da. Deve ter o mesmo tamanho da
