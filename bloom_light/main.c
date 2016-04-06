@@ -57,12 +57,12 @@ int main ()
     Imagem *img_out2 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
     filtroGaussiano(img_out, img_out2, sig, sig, NULL);
 
-    sig = sig * sig;
+    sig = 2 * sig;
 
     Imagem *img_out3 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
     filtroGaussiano(img_out2, img_out3, sig, sig, NULL);
 
-    sig = sig * sig;
+    sig = 2 * sig;
 
     Imagem *img_out4 = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
     filtroGaussiano(img_out3, img_out4, sig, sig, NULL);
