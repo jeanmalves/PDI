@@ -42,10 +42,10 @@ int main() {
   binariza (img, img_out, THRESHOLD);
   salvaImagem (img, "01 - binarizada-82.bmp");
 
-  //antes é preciso criar o kernel. O kernel é o circular?
-  //Imagem* kernel = criarKernel(largura);
   Imagem* out = criaImagem (img->largura, img->altura, 3);
-  //erode (img_out, kernel, centro, out);
+
+  Imagem* kernel = criaKernelCircular (3);
+  erode (img_out, kernel, centro, out);
 
   destroiImagem (img);
 
