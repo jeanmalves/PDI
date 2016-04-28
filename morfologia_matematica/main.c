@@ -33,13 +33,9 @@ int main() {
   salvaImagem (img_out, "01 - binarizada-82.bmp");
 
   ComponenteConexo* componentes;
-  int qtde = rotulaFloodFill (img_out, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
-
+  int qtde1 = rotulaFloodFill (img_out, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
+  printf("%d\n",qtde1 );
   salvaImagem (img_out, "01 - rotulada-82.bmp");
-
-
-
-
 
   Imagem* out = criaImagem (img->largura, img->altura, 1);
 
@@ -48,6 +44,14 @@ int main() {
   erode (img_out, kernel, coordenada, out);
 
   salvaImagem (out, "01 - erodida-82.bmp");
+
+  int qtde2 = rotulaFloodFill (out, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
+
+  printf("%d\n", qtde1 - qtde2 );
+  Imagem* out2 = criaImagem (img->largura, img->altura, 1);
+  erode (out, kernel, coordenada, out2);
+  salvaImagem (out2, "02 - erodida-82.bmp");
+
 
   destroiImagem (img);
 
