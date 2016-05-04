@@ -7,7 +7,7 @@
 #include "pdi.h"
 
 /*============================================================================*/
-#define INPUT_IMAGE "82.bmp"
+#define INPUT_IMAGE "114.bmp"
 
 #define NEGATIVO 0
 #define THRESHOLD 0.5f
@@ -49,12 +49,16 @@ int main() {
   int desvPadrao = 0;
   int totalArroz = 0;
   int menorComponente = 9999;
+  int maiorComponente = 0;
   int min = 0;
   int max = 0;
 
   for (i = 0; i < qtde; i++){
      if(componentes[i].n_pixels < menorComponente)
         menorComponente = componentes[i].n_pixels;
+
+    if (componentes[i].n_pixels > maiorComponente)
+        maiorComponente = componentes[i].n_pixels;
 
      totalPixel += componentes[i].n_pixels;
       printf("%d - %d\n", i, componentes[i].n_pixels);
@@ -63,10 +67,11 @@ int main() {
   media = totalPixel/qtde;
   printf("\n media: %d\n",  media);
   printf("\n menor comp: %d\n",  menorComponente);
+  printf("\n maior comp: %d\n",  maiorComponente);
 
   for (i = 0; i < qtde; i++){
     int sub = componentes[i].n_pixels - media;
-    var = var + pow(sub,2);
+    var = var + sub*sub;//pow(sub,2);
   }
 
   var = var / (qtde - 1);
@@ -81,11 +86,25 @@ int main() {
   max = media + desvPadrao;
 
   for (i = 0; i < qtde; i++){
-    if((componentes[i].n_pixels >= min) && (componentes[i].n_pixels <= max))
+    if(componentes[i].n_pixels <= media + desvPadrao){
       totalArroz = totalArroz + 1;
 
-    if(componentes[i].n_pixels > max)
-      totalArroz = totalArroz + 2;
+    }else{
+      /*int j = 1;
+      int result = componentes[i].n_pixels;
+
+      while (result > max) {
+        j++;
+        result = result / j;
+      }
+
+      totalArroz = totalArroz + j;
+    }*/
+
+    float n =componentes [i].n_pixels / (float) media;
+    totalArroz += (int) (n + 0.5f);
+}
+
   }
 
   printf("total de arroz: %d\n", totalArroz );
