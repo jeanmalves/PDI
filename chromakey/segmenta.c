@@ -80,6 +80,62 @@ void binarizaAdapt (Imagem* in, Imagem* out, int largura, float threshold, Image
                 out->dados [channel][row][col] = (in->dados [channel][row][col] - out->dados [channel][row][col] > threshold)? 1 : 0;
 }
 
+/*----------------------------------------------------------------------------*/
+/** Algoritmo de Otsu para encontrar o limiar para binarização. O histograma é
+ * montado considerando 8bpp.
+ *
+ * Parâmetros: Imagem* img: imagem de entrada.
+ *
+ * Valor de retorno: o limiar escolhido. */
+
+float thresholdOtsu (Imagem* img)
+{
+    int i;
+
+    // Cria e normaliza o histograma.
+    float hist [256];
+    criaHistograma8bpp1cNorm (img, 0, hist);
+
+    // Agora executa o algoritmo.
+    float peso1 = hist [0];
+    float soma1 = 0;
+    float peso2 = 1.0f - peso1;
+    float soma2 = 0;
+
+    for (i = 1; i < 256; i++)
+        soma2 += hist [i] * i;
+
+    int melhor_limiar = 0;
+    float melhor_score = 0;
+
+    float val, media1, media2, score;
+    for (i = 1; i < 256; i++)
+    {
+        peso1 += hist [i];
+        if (peso1 == 0)
+            continue;
+
+        peso2 = 1.0f - peso1;
+
+        val = hist [i]*i;
+        soma1 += val;
+        soma2 -= val;
+
+        media1 = soma1/peso1;
+        media2 = soma2/peso2;
+
+        score = peso1 * peso2 * (media1-media2) * (media1-media2);
+
+        if (score > melhor_score)
+        {
+            melhor_score = score;
+            melhor_limiar = i;
+        }
+    }
+
+    return (((float) melhor_limiar) / 255.0f);
+}
+
 /*============================================================================*/
 /* ROTULAGEM                                                                  */
 /*============================================================================*/

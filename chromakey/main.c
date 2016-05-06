@@ -7,10 +7,11 @@
 #include "pdi.h"
 
 /*============================================================================*/
-#define INPUT_IMAGE "1.bmp"
+#define INPUT_IMAGE "3.bmp"
+#define INPUT_IMAGE_BACKGROUND "jardim_botanico.bmp"
 
 #define NEGATIVO 0
-#define THRESHOLD 0.8f
+#define THRESHOLD 0.7f
 #define ALTURA_MIN 10
 #define LARGURA_MIN 10
 #define N_PIXELS_MIN 20
@@ -28,13 +29,26 @@ int main() {
       exit (1);
   }
 
-  Imagem* img_out = criaImagem (img->largura, img->altura, 3);
+  Imagem* img_back = abreImagem (INPUT_IMAGE_BACKGROUND, 3);
+  if (!img_back)
+  {
+      printf ("Erro abrindo a imagem a ser aplicada no chromakey.\n");
+      exit (1);
+  }
+  Imagem* img_back_out = criaImagem (img->largura, img->altura, 3);
+
+  redimensionaNN (img_back, img_back_out);
+  salvaImagem (img_back_out, "back_redimencionada.bmp");
+
+//  Imagem* img_out = criaImagem (img->largura, img->altura, 1);
+
 
   //binariza (img, img_out, THRESHOLD);
- binariza1(img, img_out, THRESHOLD);
-  salvaImagem (img_out, "02 - binarizada.bmp");
+ //binariza1(img, img_out, THRESHOLD);
+//  salvaImagem (img_out, "01 - binarizada.bmp");
 
   destroiImagem (img);
+  destroiImagem (img_back);
 
   return 0;
 }
@@ -56,23 +70,7 @@ void binariza1 (Imagem* in, Imagem* out, float threshold)
         for (row = 0; row < in->altura; row++){
             for (col = 0; col < in->largura; col++) {
 
-              if (threshold1 <10) {
-                limiar_red = in->dados[0][row][col];
-                limiar_green = in->dados[1][row][col];
-                limiar_blue = in->dados[2][row][col];
-                threshold1++;
-              } else{
-              threshold1 =0;
-}
-                if (in->dados[1][row][col]  == limiar_green ) {
-                  out->dados[0][row][col] = 0;
-                  out->dados[1][row][col] = 0;
-                  out->dados[2][row][col] = 0;
-                }else{
-                  out->dados[0][row][col] = in->dados [0][row][col];
-                  out->dados[1][row][col] = in->dados [1][row][col];
-                  out->dados[2][row][col] = in->dados [2][row][col];
-                }
+
 
             }
         }
