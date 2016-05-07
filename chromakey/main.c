@@ -7,8 +7,9 @@
 #include "pdi.h"
 
 /*============================================================================*/
-#define INPUT_IMAGE "2.bmp"
-#define INPUT_IMAGE_BACKGROUND "paisagem.bmp"
+#define INPUT_IMAGE "van.bmp"
+#define INPUT_IMAGE_BACKGROUND "jardim_botanico.bmp"
+#define IMAGE_CHROMAKEY "chroma_key_final.bmp"
 
 #define NEGATIVO 0
 #define THRESHOLD 0.7f
@@ -60,14 +61,40 @@ void chroma_key(Imagem* in, Imagem* bg, Imagem* out, float d)
 /*============================================================================*/
 int main(int argc, char **argv)
 {
-    Imagem* img = abreImagem (INPUT_IMAGE, 3);
+    char *img_path = NULL;
+    char *img_bg_path = NULL;
+    char *img_final_path = NULL;
+    
+    if (argc == 4)
+    {
+        img_path = argv[1];
+        img_bg_path = argv[2];
+        img_final_path = argv[3];
+    }
+    
+    Imagem* img = NULL;
+    if (img_path != NULL)
+    {
+        img = abreImagem(img_path, 3);
+    }
+    else {
+        img = abreImagem(INPUT_IMAGE, 3);
+    }
     if (!img)
     {
         printf("Erro abrindo a imagem.\n");
         exit(1);
     }
 
-    Imagem* img_bg = abreImagem (INPUT_IMAGE_BACKGROUND, 3);
+    Imagem* img_bg = NULL;
+    if (img_bg_path != NULL)
+    {
+        img_bg = abreImagem(img_bg_path, 3);
+    }
+    else
+    {
+        img_bg = abreImagem(INPUT_IMAGE_BACKGROUND, 3);
+    }
     if (!img_bg)
     {
         printf("Erro abrindo a imagem a ser aplicada no chromakey.\n");
@@ -100,7 +127,14 @@ int main(int argc, char **argv)
     
     chroma_key(img, img_bg_redimensionada, img_final, 0.1);
     
-    salvaImagem(img_final, "chroma_key.bmp");
+    if (img_final_path != NULL)
+    {
+        salvaImagem(img_final, img_final_path);
+    }
+    else
+    {
+        salvaImagem(img_final, IMAGE_CHROMAKEY);
+    }
     
     destroiImagem(img_final);
     destroiImagem(img_bg_redimensionada);
