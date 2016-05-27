@@ -12,7 +12,7 @@
 #define NEGATIVO 0
 #define THRESHOLD 0.5f
 #define ALTURA_MIN 20
-#define LARGURA_MIN 20
+#define LARGURA_MIN 7
 #define N_PIXELS_MIN 50
 
 void binarizaInvert(Imagem* in, Imagem* out, float threshold);
@@ -40,21 +40,32 @@ int main() {
 
   ComponenteConexo* componentes;
   int qtde = rotulaFloodFill (img_out2, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
-
+printf("componentes:  %d\n",qtde );
   // Mostra os objetos encontrados.
   int i;
+  int row, col;
+  Cor cor = criaCor (255,0,0);
   for (i = 0; i < qtde; i++){
 
-      int largura = componentes [i].roi.b - componentes [i].roi.c;
-      int altura = componentes [i].roi.d - componentes [i].roi.e;
+      int altura = componentes [i].roi.b - componentes [i].roi.c;
+      int largura = componentes [i].roi.d - componentes [i].roi.e;
 
       printf ("nova largura %d", largura);
       printf ("nova altura %d", altura);
 
       Imagem* img_out = criaImagem(largura, altura, 1);
+
+      for (row = 0; row < altura; row++)
+          for (col = 0; col < largura; col++)
+              //img_out->dados [0][row][col] =  obter valor do pixel da componentes[i];
+
+
+
+
+
       salvaImagem(img_out, "letra.bmp");
 
-      desenhaRetangulo (componentes [i].roi, criaCor (255,0,0), img_out2);
+      desenhaRetangulo (componentes [i].roi, cor, img_out2);
   }
 
   salvaImagem (img_out2, "placa_out_rotulada.bmp");
