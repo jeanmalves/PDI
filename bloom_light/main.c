@@ -13,6 +13,7 @@
 /*============================================================================*/
 
 #define INPUT_IMAGE "./GT2.BMP"
+//#define INPUT_IMAGE "./Wind Waker GC.bmp"
 
 #define NEGATIVO 0
 #define THRESHOLD 0.7f
@@ -83,7 +84,7 @@ int main ()
     salvaImagem (img_soma_final, "filtro_soma.bmp");
 
     Imagem *img_final = criaImagem(img_out->largura, img_out->altura, img_out->n_canais);
-    soma(img_soma_final, img, 0.4, 0.6, img_final);
+    soma(img_soma_final, img, 0.4, 0.8, img_final);
 
     salvaImagem (img_final, "final.bmp");
 
