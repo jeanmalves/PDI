@@ -55,13 +55,23 @@ printf("componentes:  %d\n",qtde );
 
       Imagem* img_out = criaImagem(largura, altura, 1);
 
-      for (row = 0; row < altura; row++)
-          for (col = 0; col < largura; col++)
-              //img_out->dados [0][row][col] =  obter valor do pixel da componentes[i];
-
-
-
-
+      // preencher imagem
+      int row;
+      int col;
+      int channel;
+      for (channel = 0; channel < img_out2->n_canais; channel++){
+          int row_in = componentes [i].roi.e;
+          int col_in = componentes [i].roi.c;
+          int row_out = 0;
+          int col_out = 0;
+          for (row_in; row_in < componentes [i].roi.d; row_in++) {
+              for (col_in; col_in < componentes [i].roi.b; col_in++) {
+                  img_out->dados [channel][row_out][col_out] = img_out2->dados [channel][row_in][col_in];
+                  col_out = col_out + 1;
+              }
+              row_out = row_out + 1;
+          }
+      }
 
       salvaImagem(img_out, "letra.bmp");
 
@@ -71,7 +81,8 @@ printf("componentes:  %d\n",qtde );
   salvaImagem (img_out2, "placa_out_rotulada.bmp");
 
   destroiImagem (img);
-
+  destroiImagem (img_out2);
+  destroiImagem (img_out);
   return 0;
 }
 
