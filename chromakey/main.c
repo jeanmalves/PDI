@@ -31,7 +31,7 @@ void chroma_key(Imagem* in, Imagem* bg, Imagem* out, float d)
             float red = in->dados[0][row][column];
             float blue = in->dados[2][row][column];
 
-            printf("linha = %d - coluna %d - red = %f - green = %f - blue = %f\n", row, column, red, green, blue);
+            //printf("linha = %d - coluna %d - red = %f - green = %f - blue = %f\n", row, column, red, green, blue);
 
             int eh_fundo = FALSE;
             
@@ -80,6 +80,7 @@ int main(int argc, char **argv)
     else {
         img = abreImagem(INPUT_IMAGE, 3);
     }
+
     if (!img)
     {
         printf("Erro abrindo a imagem.\n");
@@ -95,6 +96,7 @@ int main(int argc, char **argv)
     {
         img_bg = abreImagem(INPUT_IMAGE_BACKGROUND, 3);
     }
+
     if (!img_bg)
     {
         printf("Erro abrindo a imagem a ser aplicada no chromakey.\n");
@@ -102,8 +104,8 @@ int main(int argc, char **argv)
     }
     
     Imagem *img_bg_redimensionada = NULL;
-    if (img_bg->altura != img->altura || img_bg->largura != img->largura)
-    {
+    //if (img_bg->altura != img->altura || img_bg->largura != img->largura)
+    //{
         img_bg_redimensionada = criaImagem(img->largura, img->altura, img->n_canais);
         if (!img_bg_redimensionada)
         {
@@ -111,7 +113,7 @@ int main(int argc, char **argv)
             exit(1);
         }
         redimensionaNN(img_bg, img_bg_redimensionada);
-    }
+    //}
     
     if (img_bg_redimensionada == NULL)
     {
