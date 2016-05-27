@@ -1,6 +1,7 @@
 /*============================================================================*/
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
@@ -73,7 +74,12 @@ printf("componentes:  %d\n",qtde );
           }
       }
 
-      salvaImagem(img_out, "letra.bmp");
+      char str1[15];
+      sprintf(str1, "%d", i);
+      char str2[15] = "_letra.bmp";
+      char *res = strcat(str1, str2);
+
+      salvaImagem(img_out, res);
 
       desenhaRetangulo (componentes [i].roi, cor, img_out2);
   }
