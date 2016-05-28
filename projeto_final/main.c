@@ -1,6 +1,7 @@
 /*============================================================================*/
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
@@ -40,38 +41,55 @@ int main() {
 
   ComponenteConexo* componentes;
   int qtde = rotulaFloodFill (img_out2, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
-printf("componentes:  %d\n",qtde );
+  printf("componentes:  %d\n",qtde );
   // Mostra os objetos encontrados.
   int i;
   int row, col;
   Cor cor = criaCor (255,0,0);
   for (i = 0; i < qtde; i++){
 
-      int altura = componentes [i].roi.b - componentes [i].roi.c;
-      int largura = componentes [i].roi.d - componentes [i].roi.e;
+    int altura = componentes[i].roi.b - componentes[i].roi.c;
+    int largura = componentes[i].roi.d - componentes[i].roi.e;
+    //printf ("nova largura %d", largura);
+    //printf ("nova altura %d", altura);
 
-      printf ("nova largura %d", largura);
-      printf ("nova altura %d", altura);
+    Imagem* img_out = criaImagem(largura, altura, 1);
 
-      Imagem* img_out = criaImagem(largura, altura, 1);
+    // preencher imagem
+    int row;
+    int col;
+    int channel;
+    for (channel = 0; channel < img_out2->n_canais; channel++){
+        int row_in = 0;
+        int col_in = 0;
+        int row_out = 0;
+        int col_out = 0;
+        for (row_in = componentes[i].roi.c; row_in < componentes[i].roi.b; row_in++) {
+            for (col_in = componentes[i].roi.e; col_in < componentes[i].roi.d; col_in++) {
+                img_out->dados[channel][row_out][col_out] = img_out2->dados[channel][row_in][col_in];
+                col_out = col_out + 1;
+            }
+            col_out = 0;
+            row_out = row_out + 1;
+        }
+    }
 
-      for (row = 0; row < altura; row++)
-          for (col = 0; col < largura; col++)
-              //img_out->dados [0][row][col] =  obter valor do pixel da componentes[i];
+    char str1[15];
+    sprintf(str1, "%d", i);
+    char str2[15] = "_letra.bmp";
+    char *res = strcat(str1, str2);
 
+    binarizaInvert(img_out, img_out, 0.1f); // workaround ou gambiaround :P
+    salvaImagem(img_out, res);
 
-
-
-
-      salvaImagem(img_out, "letra.bmp");
-
-      desenhaRetangulo (componentes [i].roi, cor, img_out2);
+    desenhaRetangulo (componentes [i].roi, cor, img_out2);
   }
 
   salvaImagem (img_out2, "placa_out_rotulada.bmp");
 
   destroiImagem (img);
-
+  destroiImagem (img_out2);
+  destroiImagem (img_out);
   return 0;
 }
 
