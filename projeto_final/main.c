@@ -32,16 +32,18 @@ int main() {
   Imagem* img_out =  criaImagem (img->largura, img->altura, 1);
 
   binarizaInvert (img, img_out, THRESHOLD);
-  salvaImagem (img_out, "p_binarizada.bmp");
+  salvaImagem (img_out, "imagens/processada/p_binarizada.bmp");
 
   Imagem* img_out2 = criaImagem (img->largura, img->altura, 1);
+
   Imagem* kernel = criaKernelCircular(7);
   erode (img_out, kernel, criaCoordenada(3,3), img_out2);
-  salvaImagem (img_out2, "p_erodida.bmp");
+  salvaImagem (img_out2, "imagens/processada/p_erodida.bmp");
 
   ComponenteConexo* componentes;
   int qtde = rotulaFloodFill (img_out2, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
   printf("componentes:  %d\n",qtde );
+
   // Mostra os objetos encontrados.
   int i;
   int row, col;
@@ -76,7 +78,7 @@ int main() {
 
     char str1[15];
     sprintf(str1, "%d", i);
-    char str2[15] = "_letra.bmp";
+    char str2[15] = "imagens/letras/_letra.bmp";
     char *res = strcat(str1, str2);
 
     binarizaInvert(img_out, img_out, 0.1f); // workaround ou gambiaround :P
@@ -85,7 +87,7 @@ int main() {
     desenhaRetangulo (componentes [i].roi, cor, img_out2);
   }
 
-  salvaImagem (img_out2, "placa_out_rotulada.bmp");
+  salvaImagem (img_out2, "imagens/processada/placa_out_rotulada.bmp");
 
   destroiImagem (img);
   destroiImagem (img_out2);
