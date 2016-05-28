@@ -50,9 +50,8 @@ int main() {
 
     int altura = componentes[i].roi.b - componentes[i].roi.c;
     int largura = componentes[i].roi.d - componentes[i].roi.e;
-
-    printf ("nova largura %d", largura);
-    printf ("nova altura %d", altura);
+    //printf ("nova largura %d", largura);
+    //printf ("nova altura %d", altura);
 
     Imagem* img_out = criaImagem(largura, altura, 1);
 
@@ -80,6 +79,7 @@ int main() {
     char str2[15] = "_letra.bmp";
     char *res = strcat(str1, str2);
 
+    binarizaInvert(img_out, img_out, 0.1f); // workaround ou gambiaround :P
     salvaImagem(img_out, res);
 
     desenhaRetangulo (componentes [i].roi, cor, img_out2);
