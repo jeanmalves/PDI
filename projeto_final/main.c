@@ -8,7 +8,7 @@
 #include "pdi.h"
 
 /*============================================================================*/
-#define INPUT_IMAGE "imagens/p_test2.bmp"
+#define INPUT_IMAGE "imagens/p_test3.bmp"
 
 #define NEGATIVO 0
 #define THRESHOLD 0.5f
@@ -97,7 +97,7 @@ int main() {
 }
 
 Imagem* tratarLetras(Imagem* img_letra) {
-  binariza(img_letra, img_letra, 0.1f); // workaround ou gambiaround :P
+  binariza(img_letra, img_letra, 0.01f); // workaround ou gambiaround :P
   Imagem* img_out2 = criaImagem (img_letra->largura, img_letra->altura, 1);
   Imagem* kernel = criaKernelCircular(3);
   int qtde = 0;
