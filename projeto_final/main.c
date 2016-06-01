@@ -8,7 +8,7 @@
 #include "pdi.h"
 
 /*============================================================================*/
-#define INPUT_IMAGE "imagens/p_test1.bmp"
+#define INPUT_IMAGE "imagens/p_test2.bmp"
 
 #define NEGATIVO 0
 #define THRESHOLD 0.5f
@@ -17,7 +17,7 @@
 #define N_PIXELS_MIN 50
 
 void binarizaInvert(Imagem* in, Imagem* out, float threshold);
-
+Imagem* tratarLetras(Imagem* img_letra);
 /*============================================================================*/
 int main() {
 
@@ -78,11 +78,12 @@ int main() {
 
     char str1[15];
     sprintf(str1, "%d", i);
-    char str2[15] = "imagens/letras/_letra.bmp";
-    char *res = strcat(str1, str2);
+    char str2[25] = "_letra.bmp";
+    char caminho[30] = "imagens/processada/letras/";
+    char *res = strcat(caminho, strcat(str1, str2));
 
-    binarizaInvert(img_out, img_out, 0.1f); // workaround ou gambiaround :P
-    salvaImagem(img_out, res);
+    //binarizaInvert(img_out, img_out, 0.1f); // workaround ou gambiaround :P
+    salvaImagem(tratarLetras(img_out), res);
 
     desenhaRetangulo (componentes [i].roi, cor, img_out2);
   }
@@ -93,6 +94,34 @@ int main() {
   destroiImagem (img_out2);
   destroiImagem (img_out);
   return 0;
+}
+
+Imagem* tratarLetras(Imagem* img_letra) {
+  binariza(img_letra, img_letra, 0.1f); // workaround ou gambiaround :P
+  Imagem* img_out2 = criaImagem (img_letra->largura, img_letra->altura, 1);
+  Imagem* kernel = criaKernelCircular(3);
+  int qtde = 0;
+  int x = 0;
+  Imagem *img_previous;
+  /*do {
+    ComponenteConexo* componentes;
+    qtde = rotulaFloodFill (img_letra, &componentes, 5, 5, 1);
+    binariza(img_letra, img_letra, 0.01f); // workaround ou gambiaround :P
+    erode (img_letra, kernel, criaCoordenada(1,1), img_out2);
+
+    if (qtde == 1)
+      img_letra = clonaImagem(img_out2);
+    printf("componentes %d\n", qtde);
+
+  } while(qtde == 1);*/
+
+  binariza(img_letra, img_letra, 0.01f); // workaround ou gambiaround :P
+
+  Imagem *img_final = NULL;
+  img_final = criaImagem(32, 56, img_letra->n_canais);
+  redimensionaNN(img_letra, img_final);
+
+  return img_final;
 }
 
 void binarizaInvert (Imagem* in, Imagem* out, float threshold)
