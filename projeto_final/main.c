@@ -8,7 +8,7 @@
 #include "pdi.h"
 
 /*============================================================================*/
-#define INPUT_IMAGE "imagens/p_test3.bmp"
+#define INPUT_IMAGE "imagens/p_test7.bmp"
 
 #define NEGATIVO 0
 #define THRESHOLD 0.5f
