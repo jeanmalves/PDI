@@ -17,12 +17,24 @@
 #define N_PIXELS_MIN 50
 
 void binarizaInvert(Imagem* in, Imagem* out, float threshold);
+int ordenarLetras(int coordenadaXAtual, ComponenteConexo* componentes, int qtdeCompo);
 Imagem* tratarLetras(Imagem* img_letra);
 /*============================================================================*/
-int main() {
+int main(int argc, char **argv) {
+
+  char *img_path = NULL;
+
+  if (argc == 2)
+  {
+    img_path = argv[1];
+  }
+  else {
+    printf("Passe uma imagem por parametro");
+    exit(1);
+  }
 
   // Abre a imagem em escala de cinza, e mantem uma copia colorida dela para desenhar a saida.
-  Imagem* img = abreImagem (INPUT_IMAGE, 1);
+  Imagem* img = abreImagem (img_path, 1);
   if (!img)
   {
       printf ("Erro abrindo a imagem.\n");
@@ -44,6 +56,7 @@ int main() {
   int qtde = rotulaFloodFill (img_out2, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
   printf("componentes:  %d\n",qtde );
 
+  //ordenarLetras(componentes);
   // Mostra os objetos encontrados.
   int i;
   int row, col;
@@ -77,7 +90,7 @@ int main() {
     }
 
     char str1[15];
-    sprintf(str1, "%d", i);
+    sprintf(str1, "%d", ordenarLetras(componentes[i].roi.e, componentes, qtde));
     char str2[25] = "_letra.bmp";
     char caminho[30] = "imagens/processada/letras/";
     char *res = strcat(caminho, strcat(str1, str2));
@@ -94,6 +107,17 @@ int main() {
   destroiImagem (img_out2);
   destroiImagem (img_out);
   return 0;
+}
+
+int ordenarLetras(int coordenadaXAtual, ComponenteConexo* componentes, int qtdeCompo){
+  int posicao = 0;
+  for (int i = 0; i < qtdeCompo; i++) {
+      int coordenadaX1 = componentes[i].roi.e;
+      if (coordenadaXAtual > coordenadaX1) {
+        posicao = posicao + 1;
+      }
+  }
+  return posicao;
 }
 
 Imagem* tratarLetras(Imagem* img_letra) {
