@@ -48,8 +48,8 @@ int main(int argc, char **argv) {
 
   Imagem* img_out2 = criaImagem (img->largura, img->altura, 1);
 
-  Imagem* kernel = criaKernelCircular(7);
-  erode (img_out, kernel, criaCoordenada(3,3), img_out2);
+  Imagem* kernel = criaKernelCircular(5);
+  erode (img_out, kernel, criaCoordenada(2,2), img_out2);
   salvaImagem (img_out2, "imagens/processada/p_erodida.bmp");
 
   ComponenteConexo* componentes;
@@ -142,7 +142,7 @@ Imagem* tratarLetras(Imagem* img_letra) {
   binariza(img_letra, img_letra, 0.01f); // workaround ou gambiaround :P
 
   Imagem *img_final = NULL;
-  img_final = criaImagem(32, 56, img_letra->n_canais);
+  img_final = criaImagem(20, 20, img_letra->n_canais); // 32, 56
   redimensionaNN(img_letra, img_final);
 
   return img_final;
