@@ -16,6 +16,7 @@
 #define LARGURA_MIN 7
 #define N_PIXELS_MIN 50
 
+void chamar_jar();
 void binarizaInvert(Imagem* in, Imagem* out, float threshold);
 int ordenarLetras(int coordenadaXAtual, ComponenteConexo* componentes, int qtdeCompo);
 Imagem* tratarLetras(Imagem* img_letra);
@@ -106,7 +107,20 @@ int main(int argc, char **argv) {
   destroiImagem (img);
   destroiImagem (img_out2);
   destroiImagem (img_out);
+
+  chamar_jar();
+
   return 0;
+}
+
+/*
+  CODIGO JAVA FEIO APENAS PARA APRESENTAR AMANHA
+  SO VAI FUNCIONAR NA MINHA MAQUINA POIS O JAR ESTA COM OS PATHS DO MEU HOME
+  NOS CAMINHOS PARA ESSAS IMAGENS E REDE. DEPOIS ARRUMO E SUBO O PROJETO JAVA
+  ENQUANTO ISSO COMENTA ALI NA CHAMADA
+*/
+void chamar_jar(){
+  system("java -jar rede/car-neural-network.jar -cp");
 }
 
 int ordenarLetras(int coordenadaXAtual, ComponenteConexo* componentes, int qtdeCompo){
