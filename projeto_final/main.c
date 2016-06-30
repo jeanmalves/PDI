@@ -20,7 +20,17 @@ void chamar_jar();
 void binarizaInvert(Imagem* in, Imagem* out, float threshold);
 int ordenarLetras(int coordenadaXAtual, ComponenteConexo* componentes, int qtdeCompo);
 Imagem* tratarLetras(Imagem* img_letra);
+Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo);
 /*============================================================================*/
+// novo codigo
+typedef struct
+{
+	int compID;
+	int tamanhoX;
+  int tamanhoY;
+
+} ComponenteAux;
+
 int main(int argc, char **argv) {
 
   char *img_path = NULL;
@@ -56,6 +66,12 @@ int main(int argc, char **argv) {
   ComponenteConexo* componentes;
   int qtde = rotulaFloodFill (img_out2, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
   printf("componentes:  %d\n",qtde );
+
+	// call new function
+	tratarComponentes(componentes, qtde);
+
+  //Componetes auxiliar
+  //ComponenteAux* compAux = (ComponenteAux *) malloc(sizeof(ComponenteAux) * qtde);
 
   //ordenarLetras(componentes);
   // Mostra os objetos encontrados.
@@ -113,12 +129,6 @@ int main(int argc, char **argv) {
   return 0;
 }
 
-/*
-  CODIGO JAVA FEIO APENAS PARA APRESENTAR AMANHA
-  SO VAI FUNCIONAR NA MINHA MAQUINA POIS O JAR ESTA COM OS PATHS DO MEU HOME
-  NOS CAMINHOS PARA ESSAS IMAGENS E REDE. DEPOIS ARRUMO E SUBO O PROJETO JAVA
-  ENQUANTO ISSO COMENTA ALI NA CHAMADA
-*/
 void chamar_jar(){
   system("java -jar rede/car-neural-network.jar -cp");
 }
@@ -132,6 +142,38 @@ int ordenarLetras(int coordenadaXAtual, ComponenteConexo* componentes, int qtdeC
       }
   }
   return posicao;
+}
+/**
+Par�metros: int c: posi��o y do lado superior.
+*             int b: posi��o y do lado inferior.
+*             int e: posi��o x do lado esquerdo.
+*             int d: posi��o x do lado direito.
+
+*/
+
+Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo){
+  int tamanhoY= 0;
+  int thresholdTamanhoY = 20;
+	int aux = 0;
+	int i = 0;
+  for (i = 0; i < qtdeCompo; i++) {
+    tamanhoY =  componentes[i].roi.c - componentes[i].roi.b;
+			printf(" funcao compoente teste tamanho y %d\n", tamanhoY);
+		if (i <= (qtdeCompo -1) ) {
+			int tamanhoYprox = componentes[i+1].roi.c - componentes[i+1].roi.b;
+				printf(" funcao compoente teste tamanho y proximo %d\n", tamanhoYprox);
+			aux = tamanhoY - tamanhoYprox;
+			if (aux < 0) {
+				aux = aux * - 1;
+			}
+				printf(" funcao compoente teste %d\n", aux);
+	    if (aux > thresholdTamanhoY) {
+				printf(" funcao compoente teste\n" );
+	      // desaloca componente, exclui, sei la....
+				free(&componente[i]);
+	    }
+		}
+  }
 }
 
 Imagem* tratarLetras(Imagem* img_letra) {
