@@ -21,6 +21,7 @@ void binarizaInvert(Imagem* in, Imagem* out, float threshold);
 int ordenarLetras(int coordenadaXAtual, ComponenteConexo* componentes, int qtdeCompo);
 Imagem* tratarLetras(Imagem* img_letra);
 Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo);
+void tratarComp(ComponenteConexo* componentes, int qtdeCompo);
 /*============================================================================*/
 // novo codigo
 typedef struct
@@ -67,6 +68,7 @@ int main(int argc, char **argv) {
   int qtde = rotulaFloodFill (img_out2, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
   printf("componentes:  %d\n",qtde );
 
+	//tratarComponentes(componentes ,qtde);
 	tratarComponentes(componentes ,qtde);
 
   //Componetes auxiliar
@@ -150,33 +152,33 @@ Par�metros: int c: posi��o y do lado superior.
 
 */
 
-/*Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo){
+void tratarComp(ComponenteConexo* componentes, int qtdeCompo){
   int tamanhoY= 0;
   int thresholdTamanhoY = 5;
 	int aux = 0;
 	ComponenteConexo *componentesAux =
-		 (ComponenteConexo *)malloc(sizeof(ComponenteConexo) * (qtdeCompo - j));
+			(ComponenteConexo *)malloc(sizeof(ComponenteConexo) * (qtdeCompo));
 	//*componentes = (ComponenteConexo*) malloc (sizeof (ComponenteConexo*) * (qtdeCompo));
   for (int i = 0; i < qtdeCompo; i++) {
     tamanhoY =  componentes[i].roi.c - componentes[i].roi.b;
-		if (i <= (qtdeCompo -1) ) {
+		if (i < (qtdeCompo -1) ) {
 			int tamanhoYprox = componentes[i+1].roi.c - componentes[i+1].roi.b;
 			aux = tamanhoY - tamanhoYprox;
 			if (aux < 0) {
 				aux = aux * - 1;
 			}
 	    if (aux > thresholdTamanhoY) {
-				printf("compoente teste");
-				componentesAux[finalIndex] = componentes[i];
+				printf("compoente teste\n");
+				componentesAux[i] = componentes[i];
 				//ComponenteConexo* c = &((*componentes) [i]);
       	//free(c);
 	      // desaloca componente, exclui, sei la....
 	    }
 		}
   }
-	componentes = componentesAux;
+	*componentes = *componentesAux;
 }
-*/
+
 
 Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo) {
   int tamanhoY = 0;
@@ -188,10 +190,30 @@ Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo) {
   int j = 0;
   for (i = 0; i < qtdeCompo; i++) {
     float tamanho = componentes[i].roi.b - componentes[i].roi.c;
+
+		//mudanca
+		tamanhoY =  componentes[i].roi.c - componentes[i].roi.b;
+		printf("tamanho y %d\n", tamanhoY);
+		if (i < (qtdeCompo -1) ) {
+			int tamanhoYprox = componentes[i+1].roi.c - componentes[i+1].roi.b;
+				printf("tamanho y %d\n", tamanhoYprox);
+			aux = tamanhoY - tamanhoYprox;
+			if (aux < 0) {
+				aux = aux * - 1;
+			}
+	    if (aux > thresholdTamanhoY) {
+				printf("compoente teste\n");
+				indexes[j] = i;
+	      j++;
+	    }
+		}
+
+			/*
+
     if (tamanho > 70.0) {
       indexes[j] = i;
       j++;
-    }
+    }*/
   }
 
   ComponenteConexo *componentesAux =
@@ -213,7 +235,7 @@ Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo) {
     }
   }
 
-  componentes = componentesAux;
+  *componentes = *componentesAux;
 }
 
 
