@@ -67,8 +67,7 @@ int main(int argc, char **argv) {
   int qtde = rotulaFloodFill (img_out2, &componentes, LARGURA_MIN, ALTURA_MIN, N_PIXELS_MIN);
   printf("componentes:  %d\n",qtde );
 
-	// call new function
-	tratarComponentes(componentes, qtde);
+	tratarComponentes(componentes ,qtde);
 
   //Componetes auxiliar
   //ComponenteAux* compAux = (ComponenteAux *) malloc(sizeof(ComponenteAux) * qtde);
@@ -151,30 +150,72 @@ Par�metros: int c: posi��o y do lado superior.
 
 */
 
-Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo){
+/*Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo){
   int tamanhoY= 0;
-  int thresholdTamanhoY = 20;
+  int thresholdTamanhoY = 5;
 	int aux = 0;
-	int i = 0;
-  for (i = 0; i < qtdeCompo; i++) {
+	ComponenteConexo *componentesAux =
+		 (ComponenteConexo *)malloc(sizeof(ComponenteConexo) * (qtdeCompo - j));
+	//*componentes = (ComponenteConexo*) malloc (sizeof (ComponenteConexo*) * (qtdeCompo));
+  for (int i = 0; i < qtdeCompo; i++) {
     tamanhoY =  componentes[i].roi.c - componentes[i].roi.b;
-			printf(" funcao compoente teste tamanho y %d\n", tamanhoY);
 		if (i <= (qtdeCompo -1) ) {
 			int tamanhoYprox = componentes[i+1].roi.c - componentes[i+1].roi.b;
-				printf(" funcao compoente teste tamanho y proximo %d\n", tamanhoYprox);
 			aux = tamanhoY - tamanhoYprox;
 			if (aux < 0) {
 				aux = aux * - 1;
 			}
-				printf(" funcao compoente teste %d\n", aux);
 	    if (aux > thresholdTamanhoY) {
-				printf(" funcao compoente teste\n" );
+				printf("compoente teste");
+				componentesAux[finalIndex] = componentes[i];
+				//ComponenteConexo* c = &((*componentes) [i]);
+      	//free(c);
 	      // desaloca componente, exclui, sei la....
-				free(&componente[i]);
 	    }
 		}
   }
+	componentes = componentesAux;
 }
+*/
+
+Imagem* tratarComponentes(ComponenteConexo* componentes, int qtdeCompo) {
+  int tamanhoY = 0;
+  int thresholdTamanhoY = 20;
+  int aux = 0;
+  int i = 0;
+
+  int indexes[qtdeCompo];
+  int j = 0;
+  for (i = 0; i < qtdeCompo; i++) {
+    float tamanho = componentes[i].roi.b - componentes[i].roi.c;
+    if (tamanho > 70.0) {
+      indexes[j] = i;
+      j++;
+    }
+  }
+
+  ComponenteConexo *componentesAux =
+      (ComponenteConexo *)malloc(sizeof(ComponenteConexo) * (qtdeCompo - j));
+
+  int finalIndex = 0;
+  for (i = 0; i < qtdeCompo; i++) {
+    int achou = 0;
+    int z;
+    for (z = 0; z < j; z++) {
+      if (indexes[z] == i) {
+        achou = 1;
+        break;
+      }
+    }
+    if (achou == 0) {
+      componentesAux[finalIndex] = componentes[i];
+      finalIndex++;
+    }
+  }
+
+  componentes = componentesAux;
+}
+
 
 Imagem* tratarLetras(Imagem* img_letra) {
   binariza(img_letra, img_letra, 0.01f); // workaround ou gambiaround :P
